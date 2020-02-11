@@ -1,33 +1,28 @@
-import bs4
 from requests_html import HTMLSession
-import statistics
 import sound
-from pydub import AudioSegment
 
-url2='https://tabs.ultimate-guitar.com/tab/led_zeppelin/stairway_to_heaven_tabs_9488'
-url = 'https://tabs.ultimate-guitar.com/tab/metallica/nothing-else-matters-tabs-30154'
-url3='https://tabs.ultimate-guitar.com/tab/elvis_presley/cant_help_falling_in_love_tabs_40892'
 start='wiki_tab'
 end='*****'
+url="https://tabs.ultimate-guitar.com/tab/metallica/nothing-else-matters-tabs-30154"
 
-class App():
+class Tab():
 
     def __init__(self):
         session=HTMLSession()
         r=session.get(url)
         r.html.render()
         text=r.html.text
-        print(text)
         start_index=text.find('Download\nPlay\n')+14
         final_index=text[start_index:].find(end)+start_index
         self.tab=text[start_index:final_index]
+
+
         self.e_is_lowercase=True
         self.strings=self._find_strings()
         self.blocks=[]
         self._strip3()
-    #    s=sound.Sound(self.blocks)
+        s=sound.Sound(self.blocks)
         tstring=self.tab_string()
-    #    print(tstring)
 
     def _find_strings(self):
         self.e_is_lowercase=True
@@ -198,19 +193,28 @@ class App():
         return parts
 
     def tab_string(self):
-        q=''
-        for block in self.blocks:
-            q+='e|'+block[0]+'\n'
-            q+='B|'+block[1]+'\n'
-            q+='G|'+block[2]+'\n'
-            q+='D|'+block[3]+'\n'
-            q+='A|'+block[4]+'\n'
-            q+='E|'+block[5]+'\n'
-            q+='\n'
+        q=[]
+        for block in range(len(self.blocks)):
+            q.append([])
+            q[block].append(self.blocks[block][0]+'|')
+            q[block].append(self.blocks[block][1]+'|')
+            q[block].append(self.blocks[block][2]+'|')
+            q[block].append(self.blocks[block][3]+'|')
+            q[block].append(self.blocks[block][4]+'|')
+            q[block].append(self.blocks[block][5]+'|')
+        q[0][0]='e|'+q[0][0]
+        q[0][1]='B|'+q[0][1]
+        q[0][2]='G|'+q[0][2]
+        q[0][3]='D|'+q[0][3]
+        q[0][4]='A|'+q[0][4]
+        q[0][5]='E|'+q[0][5]
         return q
 
+    def length(self):
+     return 12+ 6*len(self.blocks)
+
 def main():
-    tab=App()
+    tab=Tab()
 
 if(__name__=='__main__'):
     main()

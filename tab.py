@@ -1,10 +1,12 @@
 from requests_html import HTMLSession
 import sound
+import sys
 
 start='wiki_tab'
 end='*****'
-url="https://tabs.ultimate-guitar.com/tab/metallica/nothing-else-matters-tabs-30154"
-
+url=sys.argv[1]
+print(url)
+print(type(url))
 class Tab():
 
     def __init__(self):

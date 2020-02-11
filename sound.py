@@ -1,6 +1,12 @@
 from pydub import AudioSegment
 
 class Sound():
+    """
+    Generates an audio file (tune.wav) from a guitar tab.
+
+    Parameters:
+    blocks: list of list of strings
+    """
     def __init__(self, blocks):
         notes=[
         ['E6','F6','F#6','G6','G#6','A6','A#6','B6','C7','C#7','D7','D#7','E7','F7','F#7','G7','G#7','A7','A#7','B7','C8','C#8','D8','D#8','E8'],

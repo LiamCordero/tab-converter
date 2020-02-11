@@ -8,8 +8,21 @@ url=sys.argv[1]
 print(url)
 print(type(url))
 class Tab():
+    """
+    This class is a representation of guitar tablature.
+
+    Attributes:
+        tab(str): raw string text that contains the tab
+        strings(str list): List of 6 strings, where each string corresponds to
+            the tab on a guitar string
+        blocks(str list list): List of groups of tabs, where each group has
+            6 strings to match up to the 6 guitar strings
+    """
 
     def __init__(self):
+        """
+        Constructor for Tab class
+        """
         session=HTMLSession()
         r=session.get(url)
         r.html.render()
@@ -27,6 +40,9 @@ class Tab():
         tstring=self.tab_string()
 
     def _find_strings(self):
+        """
+        Finds the part of the tab that corresponds to each guitar string
+        """
         self.e_is_lowercase=True
         estart=self.tab.find('e|')
         if(estart==-1):
@@ -148,6 +164,11 @@ class Tab():
         return [e,b,g,d,a,ee]
 
     def _strip3(self):
+        """
+        Cleans up the strings by deleting sections that are invalid.
+        This is used mainly to delete text on the webpage that is not part of the tab.
+        This also makes blocks, which breaks up the tab into several groups separated by '|'
+        """
         partitions=[]
         for i in range(len(self.strings)):
             partition=self._partition(self.strings[i])
@@ -166,6 +187,13 @@ class Tab():
                 self.blocks[b][s]=partitions[s][b]
 
     def _findall(self,string,sub):
+        """
+        Finds locations of sub in string and returns a list of the indices
+
+        Parameters:
+            string(str): string to search for sub
+            sub(str): Substring that is being searched for
+        """
         locations=[]
         done=False
         back=0
@@ -180,6 +208,13 @@ class Tab():
         return locations
 
     def _partition(self,string):
+        """
+        Divides string into sections divided by |
+        Returns a list of sections
+
+        Parameters:
+            string(str): string to partition
+        """
         parts=[]
         locs=self._findall(string,'|')
         for l in range(len(locs)):
@@ -195,6 +230,9 @@ class Tab():
         return parts
 
     def tab_string(self):
+        """
+        Returns a string of the tab
+        """
         q=[]
         for block in range(len(self.blocks)):
             q.append([])
@@ -212,8 +250,6 @@ class Tab():
         q[0][5]='E|'+q[0][5]
         return q
 
-    def length(self):
-     return 12+ 6*len(self.blocks)
 
 def main():
     tab=Tab()
